@@ -6,6 +6,8 @@ function heatMap( data ) {
     const { baseTemperature, monthlyVariance } = data
 
     const root = d3.select("body")
+    .append("div")
+    .attr("id","root")
     
     monthlyVariance.map( d => {
         d.month--
@@ -34,5 +36,6 @@ function heatMap( data ) {
     const chart = root.append("svg")
     .attr("width", chartSize.width)
     .attr("height", chartSize.height)
-    .classed("chart")
+    .classed("chart", true)
+
 }
