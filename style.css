@@ -6,8 +6,10 @@ body {
     height: 100vh;
 }
 
-.root {
-    width: max-content;
+#root {
+    background: linear-gradient( 250deg, #7089cc, #23569a);
+    padding: 1rem 3rem;
+    color: white;
 }
 
 .chart {
