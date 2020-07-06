@@ -7,7 +7,10 @@ function heatMap( data ) {
 
     const root = d3.select("body")
     
-    monthlyVariance.map( d => d.month--)
+    monthlyVariance.map( d => {
+        d.month--
+        d.temperature = d.variance + baseTemperature
+    })
 
     root.append("h1")
     .attr("id","title")
