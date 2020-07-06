@@ -9,6 +9,7 @@ function heatMap(globalTemperatures) {
 
 	monthlyVariance.map((d) => {
 		d.month--;
+		d.monthDate = new Date(0, d.month);
 		d.temperature = baseTemperature + d.variance;
 	});
 
@@ -35,16 +36,19 @@ function heatMap(globalTemperatures) {
 
 	const xScale = d3
 		.scaleLinear()
-		.domain([ d3.min(monthlyVariance, (d) => d.year), d3.max(monthlyVariance, (d) => d.year) + 1 ])
+		.domain([ d3.min(monthlyVariance, (d) => d.year), d3.max(monthlyVariance, (d) => d.year) ])
 		.range([ paddingLeft, width - paddingRight ]);
-	const yScale = d3.scaleLinear().domain([ -0.5, 11.5 ]).range([ paddingTop, height - paddingBottom ]);
+	const yScale = d3
+		.scaleTime()
+		.domain([ new Date(0, 0), new Date(0, 11) ])
+		.range([ paddingTop, height - paddingBottom ]);
 	const colorScale = d3
 		.scaleLinear()
 		.domain([ d3.min(monthlyVariance, (d) => d.variance), d3.max(monthlyVariance, (d) => d.variance) ])
 		.range([ 210, 0 ]);
 
-	const xAxis = d3.axisBottom(xScale).ticks(10).tickFormat(d3.format('d'));
-	const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%B')).tickSize(8);
+	const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
+	const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%B'));
 
 	chart
 		.selectAll('rect')
@@ -52,7 +56,7 @@ function heatMap(globalTemperatures) {
 		.enter()
 		.append('rect')
 		.attr('x', (d) => xScale(d.year))
-		.attr('y', (d) => yScale(d.month))
+		.attr('y', (d) => yScale(d.monthDate))
 		.attr('width', cellWidth)
 		.attr('height', cellHeight)
 		.attr('fill', (d) => d3.hsl(colorScale(d.variance), 1, 0.5))
