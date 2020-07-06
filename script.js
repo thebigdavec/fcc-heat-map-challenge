@@ -26,7 +26,7 @@ function heatMap(globalTemperatures) {
 	const width = 1500;
 	const height = 350;
 	const paddingTop = 10;
-	const paddingLeft = 75;
+	const paddingLeft = 85;
 	const paddingRight = 20;
 	const paddingBottom = 100;
 	const cellWidth = width / (d3.max(monthlyVariance, (d) => d.year) - d3.min(monthlyVariance, (d) => d.year));

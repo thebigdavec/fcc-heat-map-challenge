@@ -14,4 +14,6 @@ body {
 
 .chart {
     border: 1px solid green;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
 }
