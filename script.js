@@ -19,4 +19,20 @@ function heatMap( data ) {
     root.append("h3")
     .attr("id","description")
     .text(`${monthlyVariance[0].year} - ${monthlyVariance[monthlyVariance.length - 1].year}: Base Temperature ${ baseTemperature }˚C`)
+
+    const chartSize = {
+        width: 1500,
+        height: 250,
+        padding: {
+            top: 50,
+            left: 150,
+            right: 50,
+            bottom: 200,
+        }
+    }
+
+    const chart = root.append("svg")
+    .attr("width", chartSize.width)
+    .attr("height", chartSize.height)
+    .classed("chart")
 }
