@@ -13,11 +13,11 @@ function heatMap(globalTemperatures) {
 		d.temperature = baseTemperature + d.variance;
 	});
 
-	root.append('h1').attr('id', 'title').text('Monthly Global Land-Surface Temperature');
+	root.append('h1').attr('id', 'title').attr('text-align','center').text('Monthly Global Land-Surface Temperature');
 
 	root
 		.append('h3')
-		.attr('id', 'description')
+        .attr('id', 'description')
 		.text(
 			`${monthlyVariance[0].year} - ${monthlyVariance[monthlyVariance.length - 1]
 				.year}: Base Temperature ${baseTemperature}˚C`
@@ -120,8 +120,8 @@ function heatMap(globalTemperatures) {
 		.attr('fill', (d) => d3.hsl(colors(d), 1, 0.5));
 
     legend.append('text')
-    .text('temperature in degrees C')
-    .attr('x', legendWidth / 2 - 120)
+    .text('temperature in ˚C')
+    .attr('x', legendWidth / 2 - 80)
     .attr('y', 90)
     .attr('fill', "white")
 }
