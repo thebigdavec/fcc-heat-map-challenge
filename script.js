@@ -13,11 +13,11 @@ function heatMap(globalTemperatures) {
 		d.temperature = baseTemperature + d.variance;
 	});
 
-	root.append('h1').attr('id', 'title').attr('text-align','center').text('Monthly Global Land-Surface Temperature');
+	root.append('h1').attr('id', 'title').attr('text-align', 'center').text('Monthly Global Land-Surface Temperature');
 
 	root
 		.append('h3')
-        .attr('id', 'description')
+		.attr('id', 'description')
 		.text(
 			`${monthlyVariance[0].year} - ${monthlyVariance[monthlyVariance.length - 1]
 				.year}: Base Temperature ${baseTemperature}˚C`
@@ -30,7 +30,7 @@ function heatMap(globalTemperatures) {
 	const paddingRight = 20;
 	const paddingBottom = 170;
 	const cellWidth = width / (d3.max(monthlyVariance, (d) => d.year) - d3.min(monthlyVariance, (d) => d.year));
-	const cellHeight = (height - paddingTop - paddingBottom) / 12;
+	const cellHeight = (height - paddingTop - paddingBottom) / 12 + 3;
 
 	const chart = root.append('svg').attr('width', width).attr('height', height).classed('chart', true);
 
@@ -55,16 +55,21 @@ function heatMap(globalTemperatures) {
 		.data(monthlyVariance)
 		.enter()
 		.append('rect')
+		.attr('id', (d) => `id-${d.year}-${d.month}`)
 		.attr('x', (d) => xScale(d.year))
 		.attr('y', (d) => yScale(d.monthDate))
 		.attr('width', cellWidth)
 		.attr('height', cellHeight)
 		.attr('fill', (d) => d3.hsl(colorScale(d.variance), 1, 0.5))
-		.attr('stroke', 'black')
 		.attr('data-month', (d) => d.month)
 		.attr('data-year', (d) => d.year)
 		.attr('data-temp', (d) => d.temperature)
-		.classed('cell', true);
+		.classed('cell', true)
+		.on('mouseover', (d) => tooltip(`#id-${d.year}-${d.month}`, false))
+		.on('mouseout', (d) => {
+			d3.select('#tooltip').remove();
+			d3.selectAll('.tooltip-text').remove();
+		});
 
 	chart
 		.append('g')
@@ -119,9 +124,52 @@ function heatMap(globalTemperatures) {
 		.attr('stroke-width', 3)
 		.attr('fill', (d) => d3.hsl(colors(d), 1, 0.5));
 
-    legend.append('text')
-    .text('temperature in ˚C')
-    .attr('x', legendWidth / 2 - 80)
-    .attr('y', 90)
-    .attr('fill', "white")
+	legend.append('text').text('temperature in ˚C').attr('x', legendWidth / 2 - 80).attr('y', 90).attr('fill', 'white');
+
+	function tooltip(cellId) {
+		const cell = d3.select(cellId);
+		const x = parseFloat(cell.attr('x'));
+		const y = parseFloat(cell.attr('y'));
+		const year = cell.attr('data-year');
+
+		tipWidth = 100;
+		let xOff;
+		x < width - tipWidth ? (xOff = 5) : (xOff = -tipWidth - 5);
+		console.log(xOff);
+		const color = cell.attr('fill');
+		chart
+			.append('rect')
+            .attr('id', 'tooltip')
+            .attr('data-year', year)
+			.attr('x', x + xOff)
+			.attr('y', y)
+			.attr('width', tipWidth)
+			.attr('height', 60)
+			.attr('fill', '#fffb')
+			.attr('stroke', color)
+            .attr('stroke-width', 2)
+
+		d3
+			.select('.chart')
+			.append('text')
+			.attr('class', 'tooltip-text')
+			.text(
+				`${year}/${parseInt(cell.attr('data-month')) + 1}:`
+			)
+			.attr('x', x + xOff + 15)
+			.attr('y', y + 25)
+            .attr('fill', 'black');
+
+		d3
+			.select('.chart')
+			.append('text')
+			.attr('class', 'tooltip-text')
+			.text(
+                 `${Math.round(parseFloat(cell.attr('data-temp')) * 100) / 100}˚C`
+			)
+			.attr('x', x + xOff + 15)
+			.attr('y', y + 45)
+            .attr('fill', 'black')
+            .style('font-weight', 800);
+	}
 }
