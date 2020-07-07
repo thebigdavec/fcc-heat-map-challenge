@@ -47,12 +47,6 @@ function heatMap(globalTemperatures) {
 		.domain([ d3.min(monthlyVariance, (d) => d.variance), d3.max(monthlyVariance, (d) => d.variance) ])
 		.range([ 210, 0 ]);
 
-	// //temporary grid for width of chart
-	// const widthScale = d3.scaleLinear().domain([ 0, width ]).range([ 0, width ]);
-	// const widthAxis = d3.axisTop(widthScale).ticks(15).tickSize(height - paddingTop);
-
-	// chart.append('g').call(widthAxis).attr('transform', `translate(0, ${height})`);
-
 	const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('d'));
 	const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat('%B'));
 
@@ -107,8 +101,7 @@ function heatMap(globalTemperatures) {
 		.scaleBand()
 		.domain(temperatures)
         .range([ 0, legendWidth ])
-        .padding(0.1);
-    const legendXAxis = d3.axisBottom(legendXScale).ticks(3);
+    const legendXAxis = d3.axisBottom(legendXScale).tickFormat(d3.format('.3s'));
 	const colors = d3
 		.scaleLinear()
 		.domain([ temperatures[0], temperatures[temperatures.length - 1] ])
