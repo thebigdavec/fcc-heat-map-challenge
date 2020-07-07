@@ -28,7 +28,7 @@ function heatMap(globalTemperatures) {
 	const paddingTop = 10;
 	const paddingLeft = 85;
 	const paddingRight = 20;
-	const paddingBottom = 150;
+	const paddingBottom = 170;
 	const cellWidth = width / (d3.max(monthlyVariance, (d) => d.year) - d3.min(monthlyVariance, (d) => d.year));
 	const cellHeight = (height - paddingTop - paddingBottom) / 12;
 
@@ -97,11 +97,8 @@ function heatMap(globalTemperatures) {
 		.attr('x', (width - legendWidth) / 2)
 		.attr('y', height - legendHeight + paddingTop);
 
-	const legendXScale = d3
-		.scaleBand()
-		.domain(temperatures)
-        .range([ 0, legendWidth ])
-    const legendXAxis = d3.axisBottom(legendXScale).tickFormat(d3.format('.3s'));
+	const legendXScale = d3.scaleBand().domain(temperatures).range([ 0, legendWidth ]);
+	const legendXAxis = d3.axisBottom(legendXScale).tickFormat(d3.format('.3s'));
 	const colors = d3
 		.scaleLinear()
 		.domain([ temperatures[0], temperatures[temperatures.length - 1] ])
@@ -121,4 +118,10 @@ function heatMap(globalTemperatures) {
 		.attr('height', legendCellHeight)
 		.attr('stroke-width', 3)
 		.attr('fill', (d) => d3.hsl(colors(d), 1, 0.5));
+
+    legend.append('text')
+    .text('temperature in degrees C')
+    .attr('x', legendWidth / 2 - 120)
+    .attr('y', 90)
+    .attr('fill', "white")
 }
